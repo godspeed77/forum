@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+ <head>
+   <meta charset="utf-8"/>
+   <title>论坛首页</title>
+   <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+ </head>
+ <body>
+ <div class="container">
+   <div class="row">
+     <div class="col-xs-12 col-md-12">
+       <div class="jumbotron">
+        <center><h2>Python部落论坛</h1></center>
+       </div>
+     </div>
+   </div>
+   <div class="row">
+     <div class="col-xs-12 col-md-10">
+      {% for b in blocks %}   
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="#" style-size:16px>{{ b.name }}</a>
+          <span class="pull-right">{{ b.manager }}</span>
+        </div>
+        <div class="panel-body">
+          {{ b.desc }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+ </div>
+ </body>
+</html>
