@@ -20,7 +20,7 @@
 	   <li><a href="/">首页</a></li>
 	   <li class="active">{{ b.name }}</li>
 	 </ol>
-	 <a href="#" class="btn btn-primary">发表文章</a>
+	 <a href="/article/create/{{ b.id }}" class="btn btn-primary">发表文章</a>
 	 <br />
 	 <br />
     </div>
@@ -39,7 +39,7 @@
 	   <tbody>
 	     {% for article in articles %}
 		 <tr>
-		   <td>{{ article.title }}</td>
+                   <td><a href="/article/detail/{{ article.id }}">{{ article.title }}</a></td>
 		   <td>{{ article.content }}</td>
 		   <td>{{ article.create_timestamp|date:"Y-m-d P" }}</td>
 		   <td>{{ article.last_update_timestamp|date:"Y-m-d P" }}</td>
@@ -49,6 +49,41 @@
 	  </table>
     </div>
    </div>  
+   <nav>
+    <ul class="pagination">
+     {% if has_previous %}
+       <li>
+            <a href="?page_no=1">首页</a>
+       </li>
+       <li>
+            <a href="?page_no={{previous_page}}">&laquo;</a>
+       </li>
+     {% endif %}
+     {% for i in pre_links %}
+       <li>
+         <a href="?page_no={{i}}">{{i}}</a>
+       </li>
+     {% endfor %}
+       <li class="active">
+         <a href="?page_no={{current_no}}">{{current_no}}</a>
+       </li>
+     {% for i in post_links %}
+       <li>
+         <a href="?page_no={{i}}">{{i}}</a>
+       </li>
+     {% endfor %}
+
+     {% if has_next %}
+       <li>
+            <a href="?page_no={{next_page}}">&raquo;</a>
+       </li>
+       <li>
+            <a href="?page_no={{page_cnt}}">尾页</a>
+       </li>
+     {% endif %}
+
+  </ul>
+</nav>
   </div>
  </body>
 </html>

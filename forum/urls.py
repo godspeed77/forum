@@ -24,4 +24,7 @@ urlpatterns = [
     url(r'^article/', include('article.urls')),
 ##    url(r'^static/(?P<path>,*)$',django.contrib.staticfiles.views.serve),
     url(r'^$',views.index),
+    url(r'^register/',views.register),
+    url(r'^activate/', include('activate.urls')),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
 ]

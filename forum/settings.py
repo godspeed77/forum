@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'block',
     'article',
+    'activate',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR,"static"),)
+
+EMAIL_USE_SSL = False
+EMAIL_HOST = "smtp.126.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "monitor0530@126.com"
+EMAIL_HOST_PASSWORD = "zabbix123"
+DEFAULT_FROM_EMAIL = "monitor0530@126.com"
+LOGIN_REDIRECT_URL = '/'
