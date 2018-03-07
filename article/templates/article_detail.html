@@ -4,8 +4,12 @@
    <meta charset="utf-8"/>
    <title>论坛首页</title>
    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+   <script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+   <script type="text/javascript" src="/static/js/jquery.csrf.js"></script>
+
  </head>
  <body>
+
  <div class="container">
    <div class="row">
      <div class="col-xs-12 col-md-12">
@@ -36,10 +40,102 @@
                     <h5>{{ details.content }}</h5>
                    </th>
 		 </tr>
+            {% for i in comments %}
+             <tr>
+                 <th>{{i.owner}}</th>
+                 <th>
+                  {% if i.to_comment %}
+                   <blockquote>
+                     <b>{{ i.to_comment.owner.username }}:</b>
+                     <br />
+                     {{ i.to_comment.content|linebreaksbr }}
+                   </blockquote>
+                  {% endif %}
+
+                   {{i.content|linebreaksbr}}
+                   <a href="#replyRegion" data-id="{{ i.id }}" class="replyBtn btn btn-primary pull-right">回复</a>  
+                 </th>
+
+            </tr>
+            {% endfor %}
 	   </thead>
 	  </table>
     </div>
    </div>  
+   <nav>
+    <ul class="pagination">
+     {% if pagination_data.has_previous %}
+       <li>
+            <a href="?page_no=1">首页</a>
+       </li>
+       <li>
+            <a href="?page_no={{ pagination_data.previous_link }}">&laquo;</a>
+       </li>
+     {% endif %}
+
+   {% for no in pagination_data.page_links %}
+     <li{% if pagination_data.current_no == no %} class="active" {% endif %}>
+       <a href="?page_no={{ no }}">{{ no }}</a>
+     </li>
+   {% endfor %}
+
+     {% if pagination_data.has_next %}
+       <li>
+            <a href="?page_no={{ pagination_data.next_link }}">&raquo;</a>
+       </li>
+       <li>
+            <a href="?page_no={{ pagination_data.page_cnt }}">尾页</a>
+       </li>
+     {% endif %}
+   </ul>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tab-pane">
+           <div class="col-md-11">
+           <textarea type="text" id="commentContent" name="content" class="form-control"  style="height:148px"></textarea>
+           </div>
+           <div class="col-md-10">
+           <button id="commentBtn" type="button"  class="btn btn-primary">发表评论</button>
+           </div>
+        </div>
+     </div>
+    </div>
   </div>
+
+  </div>
+
+   <script type="text/javascript">
+   $(document).ready(function (){
+     var article_id = {{ details.id }};
+     var page_cnt = {{ pagination_data.page_cnt }};
+     var to_comment_id = 0;
+
+     $(".replyBtn").click(function(e){
+      to_comment_id = parseInt($(e.target).attr("data-id"));
+      $("#commentContent").focus();
+      return false;
+      });
+
+
+     $("#commentBtn").click(function (){
+       var comment = $("#commentContent").val();
+       var param = {"article_id": article_id, "content": comment, "to_comment_id": to_comment_id};
+
+       $.post("/comment/create/", param, function(data){
+          var ret = JSON.parse(data);
+          if (ret["status"] == "ok") {
+            $("#commentContent").val("");
+                window.location.href = "/article/detail/{{ details.id }}?page_no=" + 9999
+          } else {
+            alert(ret["msg"]);
+          }
+        });
+     });
+   });
+   </script>
+
  </body>
 </html>

@@ -22,9 +22,11 @@ import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^article/', include('article.urls')),
+##    url(r'^message/', include('message.urls')),
 ##    url(r'^static/(?P<path>,*)$',django.contrib.staticfiles.views.serve),
     url(r'^$',views.index),
     url(r'^register/',views.register),
     url(r'^activate/', include('activate.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^comment/',include('comment.urls')),
 ]

@@ -1,9 +1,3 @@
-'''from django.http import HttpResponse
-
-def index(request):
-    return HttpResponse("Hello World")
-'''
-
 from django.shortcuts import render
 from block.models import Block
 from django.contrib.auth.models import User

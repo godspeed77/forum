@@ -2,6 +2,9 @@ from django.shortcuts import render,redirect
 from block.models import Block
 from .models import Article
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from comment.models import Comment
+from .paginate_queryset import paginate_queryset
 
 def article_list(request,block_id):
     page_no = int(request.GET.get("page_no","1"))
@@ -35,7 +38,7 @@ def article_list(request,block_id):
     else:
         return render(request,"article_list.html",{"articles":article_objs,"b":block,"pre_links":pre_links,"post_links":post_links,"current_no":current_no})
 
-
+@login_required
 def article_create(request,block_id):
     block_id = int(block_id)
     block = Block.objects.get(id=block_id)
@@ -53,8 +56,12 @@ def article_create(request,block_id):
         article.save()
         return redirect("/article/list/%s" % block_id)
 
+
 def article_detail(request,detail_id):
     detail_id = int(detail_id)
     article = Article.objects.get(id=detail_id)
     block_id = article.block
-    return render(request,"article_detail.html",{"details":article,"b":block_id})
+    page_no = int(request.GET.get("page_no","1"))
+    all_comment = Comment.objects.filter(article=detail_id,status=0).order_by("-id")
+    page_comment,pagination_data = paginate_queryset(all_comment,page_no)
+    return render(request,"article_detail.html",{"details":article,"b":block_id,"comments":page_comment,"pagination_data":pagination_data})

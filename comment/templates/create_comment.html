@@ -1,0 +1,21 @@
+<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.csrf.js"></script>
+<script type="text/javascript">
+$(document).ready(function (){
+  var article_id = {{ article.id }};
+  var page_cnt = {{ pagination_data.page_cnt }};
+  
+  $("#commentBtn").click(function (){
+    var comment = $("#commentContent").val();
+	var param = {"article_id": article_id, "content": comment};
+	$.post("/comment/create/", param, function(data){
+	  var ret = JSON.parse(data);
+	  if (ret["status"] == "ok") {
+	    $("#commentContent").val("");
+		window.location.href = "/article/detail/{{ article.id }}?page_no=" + 9999
+	  } else {
+	    alert(ret["msg"]);
+	  }
+	});
+  });
+});
